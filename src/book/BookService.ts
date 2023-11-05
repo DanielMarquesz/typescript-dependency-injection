@@ -1,5 +1,7 @@
+import { autoInjectable } from "tsyringe";
 import BookRepository from "./BookRepository";
 
+@autoInjectable()
 export default class BookService {
   bookRepository: BookRepository
 
@@ -8,6 +10,12 @@ export default class BookService {
   }
 
   getBooks() {
-    return this.bookRepository.getBooks();
+
+    const books = this.bookRepository.getBooks();
+    if(!books) {
+      throw new Error("Books not found!")
+    }
+
+    return books
   }
 }

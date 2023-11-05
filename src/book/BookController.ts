@@ -1,6 +1,8 @@
 import express, { Router } from 'express';
 import BookService from './BookService';
+import { autoInjectable } from 'tsyringe';
 
+@autoInjectable()
 export default class BookController {
 
   bookService: BookService;
