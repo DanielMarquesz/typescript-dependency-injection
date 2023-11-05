@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import BookService from './BookService';
 
 export default class BookController {
@@ -8,6 +8,7 @@ export default class BookController {
 
   constructor(bookService: BookService) {
     this.bookService = bookService;
+    this.router = new Router()
   }
 
   getBooksRoute() {

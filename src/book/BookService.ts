@@ -1,11 +1,13 @@
-export default class BookService {
+import BookRepository from "./BookRepository";
 
-  books = [
-    { id: 1, name: 'The Pragmatic Programmer' },
-    { id: 2, name: 'Poems that Solve Puzzles' },
-  ];
+export default class BookService {
+  bookRepository: BookRepository
+
+  constructor(bookRepository: BookRepository) {
+    this.bookRepository = bookRepository
+  }
 
   getBooks() {
-    return this.books;
+    return this.bookRepository.getBooks();
   }
 }
