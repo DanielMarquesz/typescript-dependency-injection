@@ -10,12 +10,10 @@ export default class BookService {
   }
 
   getBooks() {
-
     const books = this.bookRepository.getBooks();
-    if(!books) {
+    if(!books || !books.length) {
       throw new Error("Books not found!")
     }
-
     return books
   }
 }

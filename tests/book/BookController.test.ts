@@ -1,34 +1,55 @@
-import sinon from 'sinon';
+import "reflect-metadata"
 import BookController from '../../src/book/BookController';
 import BookService from '../../src/book/BookService';
+import BookRepository from '../../src/book/BookRepository';
+import { container } from "tsyringe";
+
+jest.mock('../../src/book/BookRepository')
+jest.mock('../../src/book/BookService')
 
 describe('BookController >', () => {
-
-  let bookService;
+  // const bookRepositoryMock = jest.mocked(BookRepository)
+  // const bookServiceMock = jest.mocked(BookService);
+  let bookService: BookService;
 
   beforeEach(() => {
-    bookService = new BookService();
+    jest.clearAllMocks()
+  })
+
+  it('Should return the books without errors', () => {
+    // Arrange
+    BookService.prototype.getBooks = jest.fn().mockReturnValue(
+      [
+        {
+        id: 1,
+        name: "name-mock"
+        }
+      ]
+    )
+    // Act
+    const bookController = container.resolve(BookController)    
+    const result = bookController.getBooksRoute()
+
+    // Assert
+    expect(BookService.prototype.getBooks).toHaveBeenCalledTimes(1)
+    expect(BookService.prototype.getBooks).toHaveBeenCalledWith()
+    expect(result).toStrictEqual([{"id": 1, "name": "name-mock"}])
   });
 
-  test('no books >', () => {
-    // setup
-    sinon.stub(bookService, 'getBooks').returns([]);
-    const bookController = new BookController(bookService);
-    // act
-    const books = bookController.getBooksRoute();
-    // assert
-    expect(books.length).toBe(0);
-  });
+  // TODO ERROR CASE
 
-  test('one book >', () => {
-    // setup
-    sinon.stub(bookService, 'getBooks').returns([{ id: 2, name: 'Poems that Solve Puzzles' }]);
-    const bookController = new BookController(bookService);
-    // act
-    const books = bookController.getBooksRoute();
-    // assert
-    expect(books.length).toBe(1);
-    expect(books[0].id).toBe(2);
-    expect(books[0].name).toBe('Poems that Solve Puzzles');
-  });
+  // it('Should throw error when books not found', () => {
+  //   // Arrange
+  //   BookService.prototype.getBooks = () => { throw new Error() }
+
+  //   // Act
+  //   const bookController = container.resolve(BookController)    
+  //   expect(bookController.getBooksRoute()).toThrow(Error)
+
+  //   // Assert
+  //   expect(BookService.prototype.getBooks).toHaveBeenCalledTimes(1)
+  //   expect(BookService.prototype.getBooks).toHaveBeenCalledWith()
+  //   // expect(result).toStrictEqual([{"id": 1, "name": "name-mock"}])
+  // });
+
 });
